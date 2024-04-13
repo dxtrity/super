@@ -1,3 +1,13 @@
+/*
+  QUICK NOTES ABOUT PROJECT:
+
+  ALL ERRORS SHOULD HAVE "[EXPECTED]" OR "[UNEXPECTED] EMBEDDED"
+  EASIER TO DEBUG BC WE KNOW IF IT'S US FUCKING UP OR AN EXTERNAL LIB FUCKING UP.#
+
+  [EXPECTED] = purposefully thrown errors like not implemented messages.
+  [UNEXPECTED] = actual errors like os can't read file etc.
+*/
+
 package main
 
 import (
@@ -10,6 +20,12 @@ import (
 )
 
 func main() {
+  /*
+    should the program name be included ?
+    im ripping it out coz easier to implement commands
+    args[0] = first command not "main.exe" / "super".
+    might change
+  */
   args := os.Args[1:]
   
   if len(args) == 0 {
@@ -21,6 +37,7 @@ func main() {
       if err != nil {
         log.Fatalf("[UNEXPECTED]: %v", err)
       }
+      /* i think this is a dumb way to do it but it works */
       if !pathExists {
         err := initialise.InitEmptyRepo("./")
         if err != nil {
@@ -39,6 +56,12 @@ func main() {
   }
 }
 
+/*
+  should prob move to init.go coz only used in "init" for now.
+  but keeping it here as "commit" and "add" might need to check if repo exists or smth.
+  move this shit if they dont.
+  or add to a "utils.go" or smth.
+*/
 func exists(path string) (bool, error) {
     _, err := os.Stat(path)
     if err == nil { return true, nil }
