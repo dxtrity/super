@@ -17,16 +17,31 @@ func main() {
   } else if len(args) >= 1 {
     switch args[0] {
     case "init":
-      err := initialise.InitEmptyRepo("./")
+      pathExists, err := exists("./.super")
       if err != nil {
-        log.Fatal(err)
+        log.Fatalf("[UNEXPECTED]: %v", err)
+      }
+      if !pathExists {
+        err := initialise.InitEmptyRepo("./")
+        if err != nil {
+          log.Fatalf("[UNEXPECTED]: %v", err)
+        }
+      } else {
+        fmt.Println("[EXPECTED]: Repository already exists.")
       }
     case "commit":
-      fmt.Println("This is not implemented yet!")
+      fmt.Println("[EXPECTED]: This is not implemented yet!")
     case "add":
-      fmt.Println("This is not implemented yet!")
+      fmt.Println("[EXPECTED]: This is not implemented yet!")
     default:
-      fmt.Println("This is not a valid command!")
+      fmt.Print("[EXPECTED]: Improper command usage:\n\tsuper <command> -<option> <value>")
     }
   }
+}
+
+func exists(path string) (bool, error) {
+    _, err := os.Stat(path)
+    if err == nil { return true, nil }
+    if os.IsNotExist(err) { return false, nil }
+    return false, err
 }
